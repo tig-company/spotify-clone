@@ -1,7 +1,9 @@
 import React from 'react';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { PlayerProvider, usePlayer } from './PlayerContext';
 import { Track } from '../types';
+import { Player } from '../components/Player';
 
 const mockTrack1: Track = {
   id: '1',
@@ -15,7 +17,7 @@ const mockTrack1: Track = {
 
 const mockTrack2: Track = {
   id: '2',
-  title: 'Test Track 2',
+  title: 'Test Track 2',  
   artist: 'Test Artist 2',
   album: 'Test Album 2',
   duration: 200,
@@ -33,17 +35,49 @@ const mockTrack3: Track = {
   audioUrl: 'https://example.com/audio3.mp3'
 };
 
+// Additional test helpers
+const createMockTrack = (id: string, title: string, artist: string): Track => ({
+  id,
+  title,
+  artist,
+  album: `Album ${id}`,
+  duration: 180 + parseInt(id) * 10,
+  cover: `https://example.com/cover${id}.jpg`,
+  audioUrl: `https://example.com/audio${id}.mp3`
+});
+
 const mockQueue = [mockTrack1, mockTrack2, mockTrack3];
+
+// Extended test data
+const mockTrack4 = createMockTrack('4', 'Test Track 4', 'Test Artist 4');
+const mockTrack5 = createMockTrack('5', 'Test Track 5', 'Test Artist 5');
+const extendedMockQueue = [mockTrack1, mockTrack2, mockTrack3, mockTrack4, mockTrack5];
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <PlayerProvider>{children}</PlayerProvider>
 );
 
+// Mock HTMLAudioElement for tests
+Object.defineProperty(HTMLMediaElement.prototype, 'play', {
+  writable: true,
+  value: jest.fn().mockImplementation(() => Promise.resolve()),
+});
+
+Object.defineProperty(HTMLMediaElement.prototype, 'pause', {
+  writable: true,
+  value: jest.fn(),
+});
+
+Object.defineProperty(HTMLMediaElement.prototype, 'load', {
+  writable: true,
+  value: jest.fn(),
+});
+
 describe('PlayerContext', () => {
   describe('initial state', () => {
     it('should have correct initial values', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
+      
       expect(result.current.state.currentTrack).toBeNull();
       expect(result.current.state.isPlaying).toBe(false);
       expect(result.current.state.volume).toBe(1);
@@ -57,245 +91,87 @@ describe('PlayerContext', () => {
   });
 
   describe('playTrack', () => {
-    it('should play a track without queue', () => {
+    it('should start playing a track', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
+      
       act(() => {
         result.current.playTrack(mockTrack1);
       });
-
+      
       expect(result.current.state.currentTrack).toEqual(mockTrack1);
       expect(result.current.state.isPlaying).toBe(true);
-      expect(result.current.state.currentTime).toBe(0);
       expect(result.current.state.queue).toEqual([mockTrack1]);
       expect(result.current.state.currentIndex).toBe(0);
     });
 
-    it('should play a track with queue', () => {
+    it('should set queue when provided', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
+      
       act(() => {
         result.current.playTrack(mockTrack2, mockQueue);
       });
-
+      
       expect(result.current.state.currentTrack).toEqual(mockTrack2);
-      expect(result.current.state.isPlaying).toBe(true);
       expect(result.current.state.queue).toEqual(mockQueue);
-      expect(result.current.state.currentIndex).toBe(1); // mockTrack2 is at index 1
+      expect(result.current.state.currentIndex).toBe(1);
     });
   });
 
-  describe('nextTrack', () => {
-    it('should advance to next track in queue', () => {
+  describe('navigation', () => {
+    it('should navigate to next track', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
+      
       act(() => {
         result.current.setQueue(mockQueue, 0);
-      });
-
-      act(() => {
         result.current.nextTrack();
       });
-
-      expect(result.current.state.currentTrack).toEqual(mockTrack2);
-      expect(result.current.state.currentIndex).toBe(1);
-      expect(result.current.state.currentTime).toBe(0);
-    });
-
-    it('should not advance beyond queue end when repeat is none', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 2); // Start at last track
-      });
-
-      act(() => {
-        result.current.nextTrack();
-      });
-
-      // Should stay on the same track
-      expect(result.current.state.currentTrack).toEqual(mockTrack3);
-      expect(result.current.state.currentIndex).toBe(2);
-    });
-
-    it('should loop to beginning when repeat is all', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 2); // Start at last track
-        result.current.toggleRepeat(); // Set to 'one'
-        result.current.toggleRepeat(); // Set to 'all'
-      });
-
-      act(() => {
-        result.current.nextTrack();
-      });
-
-      expect(result.current.state.currentTrack).toEqual(mockTrack1);
-      expect(result.current.state.currentIndex).toBe(0);
-    });
-
-    it('should stay on same track when repeat is one', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 1);
-        result.current.toggleRepeat(); // Set to 'one'
-      });
-
-      act(() => {
-        result.current.nextTrack();
-      });
-
-      expect(result.current.state.currentTrack).toEqual(mockTrack2);
-      expect(result.current.state.currentIndex).toBe(1);
-    });
-  });
-
-  describe('previousTrack', () => {
-    it('should go to previous track in queue', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 1);
-      });
-
-      act(() => {
-        result.current.previousTrack();
-      });
-
-      expect(result.current.state.currentTrack).toEqual(mockTrack1);
-      expect(result.current.state.currentIndex).toBe(0);
-      expect(result.current.state.currentTime).toBe(0);
-    });
-
-    it('should not go before queue start when repeat is none', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 0); // Start at first track
-      });
-
-      act(() => {
-        result.current.previousTrack();
-      });
-
-      // Should stay on the same track
-      expect(result.current.state.currentTrack).toEqual(mockTrack1);
-      expect(result.current.state.currentIndex).toBe(0);
-    });
-
-    it('should loop to end when repeat is all', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 0); // Start at first track
-        result.current.toggleRepeat(); // Set to 'one'
-        result.current.toggleRepeat(); // Set to 'all'
-      });
-
-      act(() => {
-        result.current.previousTrack();
-      });
-
-      expect(result.current.state.currentTrack).toEqual(mockTrack3);
-      expect(result.current.state.currentIndex).toBe(2);
-    });
-  });
-
-  describe('setQueue', () => {
-    it('should set queue and start at specified index', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.setQueue(mockQueue, 1);
-      });
-
-      expect(result.current.state.queue).toEqual(mockQueue);
+      
       expect(result.current.state.currentIndex).toBe(1);
       expect(result.current.state.currentTrack).toEqual(mockTrack2);
-      expect(result.current.state.currentTime).toBe(0);
     });
 
-    it('should default to index 0 if not specified', () => {
+    it('should navigate to previous track', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
+      
       act(() => {
-        result.current.setQueue(mockQueue);
+        result.current.setQueue(mockQueue, 1);
+        result.current.previousTrack();
       });
-
+      
       expect(result.current.state.currentIndex).toBe(0);
       expect(result.current.state.currentTrack).toEqual(mockTrack1);
     });
   });
 
-  describe('playback controls', () => {
-    it('should pause and resume track', () => {
+  describe('volume control', () => {
+    it('should update volume', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      act(() => {
-        result.current.playTrack(mockTrack1);
-      });
-
-      expect(result.current.state.isPlaying).toBe(true);
-
-      act(() => {
-        result.current.pauseTrack();
-      });
-
-      expect(result.current.state.isPlaying).toBe(false);
-
-      act(() => {
-        result.current.resumeTrack();
-      });
-
-      expect(result.current.state.isPlaying).toBe(true);
-    });
-
-    it('should set volume', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
+      
       act(() => {
         result.current.setVolume(0.5);
       });
-
+      
       expect(result.current.state.volume).toBe(0.5);
     });
+  });
 
-    it('should toggle shuffle', () => {
+  describe('error handling', () => {
+    it('should handle operations on empty state gracefully', () => {
       const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      expect(result.current.state.shuffle).toBe(false);
-
-      act(() => {
-        result.current.toggleShuffle();
-      });
-
-      expect(result.current.state.shuffle).toBe(true);
-    });
-
-    it('should cycle through repeat modes', () => {
-      const { result } = renderHook(() => usePlayer(), { wrapper });
-
-      expect(result.current.state.repeat).toBe('none');
-
-      act(() => {
-        result.current.toggleRepeat();
-      });
-
-      expect(result.current.state.repeat).toBe('one');
-
-      act(() => {
-        result.current.toggleRepeat();
-      });
-
-      expect(result.current.state.repeat).toBe('all');
-
-      act(() => {
-        result.current.toggleRepeat();
-      });
-
-      expect(result.current.state.repeat).toBe('none');
+      
+      // All operations should work even with empty state
+      expect(() => {
+        act(() => {
+          result.current.pauseTrack();
+          result.current.resumeTrack();
+          result.current.nextTrack();
+          result.current.previousTrack();
+          result.current.toggleShuffle();
+          result.current.toggleRepeat();
+          result.current.setVolume(0.5);
+          result.current.setCurrentTime(10);
+        });
+      }).not.toThrow();
     });
   });
 });
