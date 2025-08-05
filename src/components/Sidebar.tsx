@@ -2,6 +2,7 @@ import React from 'react';
 import { Home, Search, Library, Plus, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { ThemeToggle } from './ui/theme-toggle';
+import { useNavigation } from '../contexts/NavigationContext';
 import { cn } from '../lib/utils';
 
 interface NavItemProps {
@@ -60,8 +61,17 @@ function PlaylistItem({ children, onClick }: PlaylistItemProps) {
 }
 
 export function Sidebar() {
+  const { state, goHome } = useNavigation();
+  const isHome = state.currentView === 'home';
+
+  // Hide sidebar when details sidebar is shown on smaller screens
+  const sidebarClasses = cn(
+    "w-60 lg:w-60 md:w-16 bg-spotify-black text-white p-6 md:p-2 flex flex-col gap-8 md:gap-4",
+    state.showDetailsSidebar && "lg:flex md:hidden sm:hidden"
+  );
+
   return (
-    <aside className="w-60 lg:w-60 md:w-16 bg-spotify-black text-white p-6 md:p-2 flex flex-col gap-8 md:gap-4">
+    <aside className={sidebarClasses}>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold m-0 md:hidden">Spotify</h1>
         <ThemeToggle />
@@ -72,7 +82,8 @@ export function Sidebar() {
           <NavItem
             icon={<Home size={24} />}
             label="Home"
-            active={true}
+            active={isHome}
+            onClick={goHome}
           />
           <NavItem
             icon={<Search size={24} />}

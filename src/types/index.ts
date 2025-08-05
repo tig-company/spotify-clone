@@ -8,6 +8,27 @@ export interface Track {
   audioUrl: string;
 }
 
+export interface Album {
+  id: string;
+  name: string;
+  artist: string;
+  artistId: string;
+  cover: string;
+  tracks: Track[];
+  releaseDate: string;
+  genre: string;
+}
+
+export interface Artist {
+  id: string;
+  name: string;
+  image: string;
+  genres: string[];
+  albums: Album[];
+  topTracks: Track[];
+  monthlyListeners: number;
+}
+
 export interface Playlist {
   id: string;
   name: string;
@@ -33,4 +54,11 @@ export interface PlayerState {
   duration: number;
   shuffle: boolean;
   repeat: 'none' | 'one' | 'all';
+}
+
+export interface NavigationState {
+  currentView: 'home' | 'artist' | 'album';
+  selectedArtist: Artist | null;
+  selectedAlbum: Album | null;
+  showDetailsSidebar: boolean;
 }
