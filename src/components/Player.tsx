@@ -12,7 +12,7 @@ function formatTime(seconds: number): string {
 }
 
 export function Player() {
-  const { state, pauseTrack, resumeTrack, setVolume, toggleShuffle, toggleRepeat } = usePlayer();
+  const { state, pauseTrack, resumeTrack, setVolume, toggleShuffle, toggleRepeat, nextTrack, previousTrack } = usePlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {

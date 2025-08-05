@@ -2,7 +2,9 @@ import React from 'react';
 import { Play } from 'lucide-react';
 import { Button } from './ui/button';
 import { usePlayer } from '../contexts/PlayerContext';
+import { useNavigation } from '../contexts/NavigationContext';
 import { Track } from '../types';
+import { mockTracks, findArtistByName, findAlbumByNameAndArtist } from '../data/mockData';
 
 const mockTracks: Track[] = [
   {
@@ -94,9 +96,24 @@ function TrackCard({ track, onPlay }: TrackCardProps) {
 
 export function MainContent() {
   const { playTrack } = usePlayer();
+  const { showArtistDetails, showAlbumDetails } = useNavigation();
 
   const handlePlayTrack = (track: Track) => {
     playTrack(track);
+  };
+
+  const handleArtistClick = (artistName: string) => {
+    const artist = findArtistByName(artistName);
+    if (artist) {
+      showArtistDetails(artist);
+    }
+  };
+
+  const handleAlbumClick = (albumName: string, artistName: string) => {
+    const album = findAlbumByNameAndArtist(albumName, artistName);
+    if (album) {
+      showAlbumDetails(album);
+    }
   };
 
   const getGreeting = () => {

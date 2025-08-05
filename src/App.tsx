@@ -3,6 +3,7 @@ import { PlayerProvider } from './contexts/PlayerContext';
 import { ThemeProvider } from './components/ui/theme-provider';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
+import { DetailsSidebar } from './components/DetailsSidebar';
 import { Player } from './components/Player';
 
 function App() {

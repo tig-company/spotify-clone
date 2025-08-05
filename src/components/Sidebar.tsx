@@ -60,6 +60,15 @@ function PlaylistItem({ children, onClick }: PlaylistItemProps) {
 }
 
 export function Sidebar() {
+  const { state, goHome } = useNavigation();
+  const isHome = state.currentView === 'home';
+
+  // Hide sidebar when details sidebar is shown on smaller screens
+  const sidebarClasses = cn(
+    "w-60 lg:w-60 md:w-16 bg-spotify-black text-white p-6 md:p-2 flex flex-col gap-8 md:gap-4",
+    state.showDetailsSidebar && "lg:flex md:hidden sm:hidden"
+  );
+
   return (
     <aside className="w-60 lg:w-60 md:w-16 bg-spotify-black text-white p-6 md:p-2 flex flex-col gap-8 md:gap-4">
       <div className="flex items-center justify-between">
