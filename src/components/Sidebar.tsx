@@ -2,7 +2,6 @@ import React from 'react';
 import { Home, Search, Library, Plus, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { ThemeToggle } from './ui/theme-toggle';
-import { useNavigation } from '../contexts/NavigationContext';
 import { cn } from '../lib/utils';
 
 interface NavItemProps {
@@ -71,7 +70,7 @@ export function Sidebar() {
   );
 
   return (
-    <aside className={sidebarClasses}>
+    <aside className="w-60 lg:w-60 md:w-16 bg-spotify-black text-white p-6 md:p-2 flex flex-col gap-8 md:gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold m-0 md:hidden">Spotify</h1>
         <ThemeToggle />
@@ -82,8 +81,7 @@ export function Sidebar() {
           <NavItem
             icon={<Home size={24} />}
             label="Home"
-            active={isHome}
-            onClick={goHome}
+            active={true}
           />
           <NavItem
             icon={<Search size={24} />}
