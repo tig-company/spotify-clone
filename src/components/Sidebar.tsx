@@ -1,144 +1,116 @@
 import React from 'react';
 import { Home, Search, Library, Plus, Heart } from 'lucide-react';
-import styled from 'styled-components';
+import { Button } from './ui/button';
+import { ThemeToggle } from './ui/theme-toggle';
+import { cn } from '../lib/utils';
 
-const SidebarContainer = styled.aside`
-  width: 240px;
-  background-color: #000;
-  color: #fff;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-`;
+interface NavItemProps {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}
 
-const Logo = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-`;
+function NavItem({ icon, label, active = false, onClick }: NavItemProps) {
+  return (
+    <li
+      role="menuitem"
+      tabIndex={0}
+      className={cn(
+        "flex items-center gap-4 cursor-pointer text-spotify-text-gray font-medium transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-spotify-green rounded",
+        active && "text-white"
+      )}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      aria-current={active ? 'page' : undefined}
+    >
+      {icon}
+      <span className="md:hidden">{label}</span>
+    </li>
+  );
+}
 
-const NavList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
+interface PlaylistItemProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
 
-const NavItem = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
-  color: #b3b3b3;
-  font-weight: 500;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #fff;
-  }
-
-  &.active {
-    color: #fff;
-  }
-`;
-
-const PlaylistSection = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const PlaylistHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const PlaylistTitle = styled.h3`
-  font-size: 14px;
-  font-weight: 500;
-  color: #b3b3b3;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-`;
-
-const CreatePlaylistButton = styled.button`
-  background: none;
-  border: none;
-  color: #b3b3b3;
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #fff;
-  }
-`;
-
-const PlaylistList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const PlaylistItem = styled.li`
-  color: #b3b3b3;
-  cursor: pointer;
-  font-size: 14px;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #fff;
-  }
-`;
+function PlaylistItem({ children, onClick }: PlaylistItemProps) {
+  return (
+    <li
+      role="menuitem"
+      tabIndex={0}
+      className="text-spotify-text-gray cursor-pointer text-sm transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-spotify-green rounded p-1"
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+    >
+      {children}
+    </li>
+  );
+}
 
 export function Sidebar() {
   return (
-    <SidebarContainer>
-      <Logo>Spotify</Logo>
+    <aside className="w-60 lg:w-60 md:w-16 bg-spotify-black text-white p-6 md:p-2 flex flex-col gap-8 md:gap-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold m-0 md:hidden">Spotify</h1>
+        <ThemeToggle />
+      </div>
       
-      <nav>
-        <NavList>
-          <NavItem className="active">
-            <Home size={24} />
-            <span>Home</span>
-          </NavItem>
-          <NavItem>
-            <Search size={24} />
-            <span>Search</span>
-          </NavItem>
-          <NavItem>
-            <Library size={24} />
-            <span>Your Library</span>
-          </NavItem>
-        </NavList>
+      <nav role="navigation" aria-label="Main navigation">
+        <ul role="menu" className="list-none p-0 m-0 flex flex-col gap-4">
+          <NavItem
+            icon={<Home size={24} />}
+            label="Home"
+            active={true}
+          />
+          <NavItem
+            icon={<Search size={24} />}
+            label="Search"
+          />
+          <NavItem
+            icon={<Library size={24} />}
+            label="Your Library"
+          />
+        </ul>
       </nav>
 
-      <PlaylistSection>
-        <PlaylistHeader>
-          <PlaylistTitle>Playlists</PlaylistTitle>
-          <CreatePlaylistButton>
+      <div className="flex-1 flex flex-col gap-4 md:hidden">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-medium text-spotify-text-gray m-0 uppercase tracking-wider">
+            Playlists
+          </h3>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="text-spotify-text-gray hover:text-white hover:bg-transparent"
+          >
             <Plus size={16} />
-          </CreatePlaylistButton>
-        </PlaylistHeader>
+          </Button>
+        </div>
         
-        <PlaylistList>
+        <ul role="menu" aria-label="Playlists" className="list-none p-0 m-0 flex flex-col gap-2">
           <PlaylistItem>
-            <Heart size={14} style={{ marginRight: '8px', display: 'inline' }} />
-            Liked Songs
+            <div className="flex items-center gap-2">
+              <Heart size={14} />
+              Liked Songs
+            </div>
           </PlaylistItem>
           <PlaylistItem>My Playlist #1</PlaylistItem>
           <PlaylistItem>Chill Vibes</PlaylistItem>
           <PlaylistItem>Workout Mix</PlaylistItem>
-        </PlaylistList>
-      </PlaylistSection>
-    </SidebarContainer>
+        </ul>
+      </div>
+    </aside>
   );
 }

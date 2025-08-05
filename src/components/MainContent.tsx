@@ -1,113 +1,8 @@
 import React from 'react';
 import { Play } from 'lucide-react';
-import styled from 'styled-components';
+import { Button } from './ui/button';
 import { usePlayer } from '../contexts/PlayerContext';
 import { Track } from '../types';
-
-const MainContainer = styled.main`
-  flex: 1;
-  background: linear-gradient(180deg, #1f1f1f 0%, #121212 100%);
-  color: #fff;
-  overflow-y: auto;
-`;
-
-const Header = styled.div`
-  padding: 60px 32px 0;
-  background: linear-gradient(180deg, #1f1f1f 0%, transparent 100%);
-`;
-
-const Greeting = styled.h1`
-  font-size: 32px;
-  font-weight: 900;
-  margin: 0 0 24px 0;
-`;
-
-const RecentlyPlayed = styled.section`
-  margin-bottom: 48px;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-`;
-
-const TrackGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 24px;
-  padding: 0 32px;
-`;
-
-const TrackCard = styled.div`
-  background-color: #181818;
-  border-radius: 8px;
-  padding: 16px;
-  transition: background-color 0.3s;
-  cursor: pointer;
-  position: relative;
-  group: hover;
-
-  &:hover {
-    background-color: #282828;
-  }
-
-  &:hover .play-button {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const TrackCover = styled.img`
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 8px;
-  object-fit: cover;
-  margin-bottom: 16px;
-`;
-
-const TrackTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const TrackArtist = styled.p`
-  font-size: 14px;
-  color: #b3b3b3;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const PlayButton = styled.button`
-  position: absolute;
-  bottom: 104px;
-  right: 16px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #1db954;
-  border: none;
-  color: #000;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.3s;
-  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
-
-  &:hover {
-    background-color: #1ed760;
-    transform: scale(1.05) translateY(0);
-  }
-`;
 
 const mockTracks: Track[] = [
   {
@@ -166,6 +61,37 @@ const mockTracks: Track[] = [
   }
 ];
 
+interface TrackCardProps {
+  track: Track;
+  onPlay: (track: Track) => void;
+}
+
+function TrackCard({ track, onPlay }: TrackCardProps) {
+  return (
+    <div className="bg-spotify-medium-gray rounded-lg p-4 transition-colors duration-300 cursor-pointer relative group hover:bg-spotify-light-gray">
+      <img 
+        src={track.cover} 
+        alt={track.title}
+        className="w-full aspect-square rounded-lg object-cover mb-4" 
+      />
+      <h3 className="text-base font-bold mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+        {track.title}
+      </h3>
+      <p className="text-sm text-spotify-text-gray m-0 whitespace-nowrap overflow-hidden text-ellipsis">
+        {track.artist}
+      </p>
+      <Button
+        variant="spotify"
+        size="icon-lg"
+        className="absolute bottom-[104px] right-4 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 shadow-lg hover:scale-105"
+        onClick={() => onPlay(track)}
+      >
+        <Play size={24} />
+      </Button>
+    </div>
+  );
+}
+
 export function MainContent() {
   const { playTrack } = usePlayer();
 
@@ -181,31 +107,27 @@ export function MainContent() {
   };
 
   return (
-    <MainContainer>
-      <Header>
-        <Greeting>{getGreeting()}</Greeting>
-      </Header>
+    <main className="flex-1 bg-gradient-to-b from-neutral-800 to-spotify-dark-gray text-white overflow-y-auto">
+      <div className="pt-15 px-8 md:px-6 sm:px-4 pb-0 bg-gradient-to-b from-neutral-800 to-transparent">
+        <h1 className="text-3xl md:text-2xl sm:text-xl font-black mb-6 m-0">
+          {getGreeting()}
+        </h1>
+      </div>
 
-      <RecentlyPlayed>
-        <div style={{ padding: '0 32px' }}>
-          <SectionTitle>Recently played</SectionTitle>
+      <section className="mb-12">
+        <div className="px-8 md:px-6 sm:px-4">
+          <h2 className="text-2xl md:text-xl sm:text-lg font-bold mb-4 m-0">Recently played</h2>
         </div>
-        <TrackGrid>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-6 lg:gap-4 md:gap-3 sm:gap-2 px-8 md:px-6 sm:px-4">
           {mockTracks.map((track) => (
-            <TrackCard key={track.id}>
-              <TrackCover src={track.cover} alt={track.title} />
-              <TrackTitle>{track.title}</TrackTitle>
-              <TrackArtist>{track.artist}</TrackArtist>
-              <PlayButton 
-                className="play-button" 
-                onClick={() => handlePlayTrack(track)}
-              >
-                <Play size={24} />
-              </PlayButton>
-            </TrackCard>
+            <TrackCard 
+              key={track.id}
+              track={track}
+              onPlay={handlePlayTrack}
+            />
           ))}
-        </TrackGrid>
-      </RecentlyPlayed>
-    </MainContainer>
+        </div>
+      </section>
+    </main>
   );
 }

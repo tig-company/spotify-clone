@@ -1,164 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Volume2 } from 'lucide-react';
-import styled from 'styled-components';
+import { Button } from './ui/button';
+import { Slider } from './ui/slider';
 import { usePlayer } from '../contexts/PlayerContext';
-
-const PlayerContainer = styled.div`
-  height: 90px;
-  background-color: #181818;
-  border-top: 1px solid #282828;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  color: #fff;
-`;
-
-const TrackInfo = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-`;
-
-const TrackCover = styled.img`
-  width: 56px;
-  height: 56px;
-  border-radius: 4px;
-  object-fit: cover;
-`;
-
-const TrackDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-`;
-
-const TrackTitle = styled.span`
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const TrackArtist = styled.span`
-  font-size: 12px;
-  color: #b3b3b3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const PlayerControls = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  max-width: 722px;
-`;
-
-const ControlButtons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`;
-
-const ControlButton = styled.button<{ $active?: boolean }>`
-  background: none;
-  border: none;
-  color: ${props => props.$active ? '#1db954' : '#b3b3b3'};
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #fff;
-  }
-
-  &:disabled {
-    color: #404040;
-    cursor: not-allowed;
-  }
-`;
-
-const PlayButton = styled(ControlButton)`
-  background-color: #fff;
-  color: #000;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background-color: #f0f0f0;
-    color: #000;
-  }
-`;
-
-const ProgressContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 722px;
-`;
-
-const TimeDisplay = styled.span`
-  font-size: 11px;
-  color: #b3b3b3;
-  min-width: 40px;
-  text-align: center;
-`;
-
-const ProgressBar = styled.div`
-  flex: 1;
-  height: 4px;
-  background-color: #4f4f4f;
-  border-radius: 2px;
-  cursor: pointer;
-  position: relative;
-
-  &:hover .progress-fill {
-    background-color: #1db954;
-  }
-`;
-
-const ProgressFill = styled.div<{ $progress: number }>`
-  width: ${props => props.$progress}%;
-  height: 100%;
-  background-color: #fff;
-  border-radius: 2px;
-  transition: background-color 0.2s;
-`;
-
-const VolumeControls = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-`;
-
-const VolumeSlider = styled.input`
-  width: 93px;
-  height: 4px;
-  background: #4f4f4f;
-  outline: none;
-  border-radius: 2px;
-  cursor: pointer;
-
-  &::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    background: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-`;
+import { cn } from '../lib/utils';
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -191,8 +36,8 @@ export function Player() {
     }
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const volume = parseFloat(e.target.value);
+  const handleVolumeChange = (value: number[]) => {
+    const volume = value[0];
     setVolume(volume);
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -202,60 +47,118 @@ export function Player() {
   const progressPercentage = state.duration > 0 ? (state.currentTime / state.duration) * 100 : 0;
 
   return (
-    <PlayerContainer>
-      <audio ref={audioRef} />
+    <div className="h-[90px] bg-spotify-medium-gray border-t border-spotify-light-gray flex items-center px-4 md:px-2 text-white" role="region" aria-label="Music player">
+      <audio ref={audioRef} aria-hidden="true" />
       
-      <TrackInfo>
+      {/* Track Info */}
+      <div className="flex-1 flex items-center gap-3 min-w-0 md:hidden">
         {state.currentTrack && (
           <>
-            <TrackCover src={state.currentTrack.cover} alt={state.currentTrack.title} />
-            <TrackDetails>
-              <TrackTitle>{state.currentTrack.title}</TrackTitle>
-              <TrackArtist>{state.currentTrack.artist}</TrackArtist>
-            </TrackDetails>
+            <img 
+              src={state.currentTrack.cover} 
+              alt={state.currentTrack.title}
+              className="w-14 h-14 rounded object-cover"
+            />
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+                {state.currentTrack.title}
+              </span>
+              <span className="text-xs text-spotify-text-gray whitespace-nowrap overflow-hidden text-ellipsis">
+                {state.currentTrack.artist}
+              </span>
+            </div>
           </>
         )}
-      </TrackInfo>
+      </div>
 
-      <PlayerControls>
-        <ControlButtons>
-          <ControlButton onClick={toggleShuffle} $active={state.shuffle}>
+      {/* Player Controls */}
+      <div className="flex-1 md:flex-none flex flex-col items-center gap-2 max-w-[722px] md:max-w-none">
+        <div className="flex items-center gap-4 md:gap-2" role="group" aria-label="Playback controls">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={toggleShuffle}
+            className={cn(
+              "text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden",
+              state.shuffle && "text-spotify-green"
+            )}
+            aria-label={`${state.shuffle ? 'Disable' : 'Enable'} shuffle`}
+            aria-pressed={state.shuffle}
+          >
             <Shuffle size={16} />
-          </ControlButton>
-          <ControlButton>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden"
+            aria-label="Previous track"
+          >
             <SkipBack size={16} />
-          </ControlButton>
-          <PlayButton onClick={handlePlayPause} disabled={!state.currentTrack}>
+          </Button>
+          <Button
+            variant="spotify"
+            size="icon"
+            onClick={handlePlayPause}
+            disabled={!state.currentTrack}
+            className="w-8 h-8"
+            aria-label={state.isPlaying ? 'Pause' : 'Play'}
+          >
             {state.isPlaying ? <Pause size={16} /> : <Play size={16} />}
-          </PlayButton>
-          <ControlButton>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden"
+            aria-label="Next track"
+          >
             <SkipForward size={16} />
-          </ControlButton>
-          <ControlButton onClick={toggleRepeat} $active={state.repeat !== 'none'}>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={toggleRepeat}
+            className={cn(
+              "text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden",
+              state.repeat !== 'none' && "text-spotify-green"
+            )}
+            aria-label={`Repeat: ${state.repeat}`}
+            aria-pressed={state.repeat !== 'none'}
+          >
             <Repeat size={16} />
-          </ControlButton>
-        </ControlButtons>
+          </Button>
+        </div>
 
-        <ProgressContainer>
-          <TimeDisplay>{formatTime(state.currentTime)}</TimeDisplay>
-          <ProgressBar>
-            <ProgressFill className="progress-fill" $progress={progressPercentage} />
-          </ProgressBar>
-          <TimeDisplay>{formatTime(state.duration)}</TimeDisplay>
-        </ProgressContainer>
-      </PlayerControls>
+        <div className="flex items-center gap-2 w-full max-w-[722px] md:hidden">
+          <span className="text-xs text-spotify-text-gray min-w-[40px] text-center">
+            {formatTime(state.currentTime)}
+          </span>
+          <div className="flex-1 group cursor-pointer">
+            <div className="h-1 bg-gray-600 rounded-full relative">
+              <div 
+                className="h-full bg-white rounded-full transition-colors duration-200 group-hover:bg-spotify-green"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+          </div>
+          <span className="text-xs text-spotify-text-gray min-w-[40px] text-center">
+            {formatTime(state.duration)}
+          </span>
+        </div>
+      </div>
 
-      <VolumeControls>
-        <Volume2 size={16} color="#b3b3b3" />
-        <VolumeSlider
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={state.volume}
-          onChange={handleVolumeChange}
-        />
-      </VolumeControls>
-    </PlayerContainer>
+      {/* Volume Controls */}
+      <div className="flex-1 md:hidden flex items-center justify-end gap-2">
+        <Volume2 size={16} className="text-spotify-text-gray" />
+        <div className="w-[93px] group">
+          <Slider
+            value={[state.volume]}
+            max={1}
+            step={0.01}
+            onValueChange={handleVolumeChange}
+            className="w-full"
+          />
+        </div>
+      </div>
+    </div>
   );
 }
