@@ -1,0 +1,13 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="afterHours" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b0000"/>
+      <stop offset="100%" style="stop-color:#000000"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#afterHours)"/>
+  <circle cx="150" cy="100" r="30" fill="#ff6b6b" opacity="0.8"/>
+  <rect x="75" y="150" width="150" height="50" fill="#000" opacity="0.7"/>
+  <text x="150" y="180" text-anchor="middle" fill="#ff6b6b" font-family="Arial, sans-serif" font-size="16" font-weight="bold">AFTER HOURS</text>
+  <text x="150" y="260" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12">The Weeknd</text>
+</svg>

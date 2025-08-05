@@ -1,0 +1,15 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="lilnasGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#9400d3"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="150" r="150" fill="url(#lilnasGrad)"/>
+  <circle cx="150" cy="120" r="40" fill="#8b4513"/>
+  <ellipse cx="140" cy="115" rx="3" ry="5" fill="#ffffff"/>
+  <ellipse cx="160" cy="115" rx="3" ry="5" fill="#ffffff"/>
+  <path d="M140 130 Q150 135 160 130" stroke="#ffffff" stroke-width="2" fill="none"/>
+  <rect x="130" y="90" width="40" height="15" rx="7" fill="#000000"/>
+  <text x="150" y="240" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="bold">LIL NAS X</text>
+</svg>

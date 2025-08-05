@@ -1,0 +1,7 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#1a1a1a"/>
+  <rect x="50" y="50" width="200" height="200" rx="15" fill="#404040"/>
+  <circle cx="150" cy="150" r="40" fill="#1db954"/>
+  <path d="M135 135 L135 165 L165 150 Z" fill="#1a1a1a"/>
+  <text x="150" y="280" text-anchor="middle" fill="#b3b3b3" font-family="Arial, sans-serif" font-size="14">Track</text>
+</svg>

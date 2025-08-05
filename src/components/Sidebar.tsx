@@ -2,6 +2,7 @@ import React from 'react';
 import { Home, Search, Library, Plus, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { ThemeToggle } from './ui/theme-toggle';
+import { useNavigation } from '../contexts/NavigationContext';
 import { cn } from '../lib/utils';
 
 interface NavItemProps {
@@ -81,7 +82,8 @@ export function Sidebar() {
           <NavItem
             icon={<Home size={24} />}
             label="Home"
-            active={true}
+            active={isHome}
+            onClick={goHome}
           />
           <NavItem
             icon={<Search size={24} />}

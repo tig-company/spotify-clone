@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Slider } from './ui/slider';
+import { Image } from './ui/image';
 import { usePlayer } from '../contexts/PlayerContext';
 import { cn } from '../lib/utils';
 
@@ -54,10 +55,13 @@ export function Player() {
       <div className="flex-1 flex items-center gap-3 min-w-0 md:hidden">
         {state.currentTrack && (
           <>
-            <img 
+            <Image 
               src={state.currentTrack.cover} 
-              alt={state.currentTrack.title}
+              alt={`${state.currentTrack.title} album cover`}
               className="w-14 h-14 rounded object-cover"
+              fallbackSrc="/images/default-album.svg"
+              lazy={false}
+              showLoadingSkeleton={true}
             />
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">

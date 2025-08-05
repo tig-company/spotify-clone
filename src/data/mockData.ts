@@ -7,7 +7,7 @@ export const mockTracks: Track[] = [
     artist: 'The Weeknd',
     album: 'After Hours',
     duration: 200,
-    cover: 'https://via.placeholder.com/300x300?text=Blinding+Lights',
+    cover: '/images/after-hours.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -16,7 +16,7 @@ export const mockTracks: Track[] = [
     artist: 'Harry Styles',
     album: 'Fine Line',
     duration: 174,
-    cover: 'https://via.placeholder.com/300x300?text=Watermelon+Sugar',
+    cover: '/images/fine-line.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -25,7 +25,7 @@ export const mockTracks: Track[] = [
     artist: 'Dua Lipa',
     album: 'Future Nostalgia',
     duration: 203,
-    cover: 'https://via.placeholder.com/300x300?text=Levitating',
+    cover: '/images/future-nostalgia.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -34,7 +34,7 @@ export const mockTracks: Track[] = [
     artist: 'Olivia Rodrigo',
     album: 'SOUR',
     duration: 178,
-    cover: 'https://via.placeholder.com/300x300?text=Good+4+U',
+    cover: '/images/sour.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -43,7 +43,7 @@ export const mockTracks: Track[] = [
     artist: 'The Kid LAROI & Justin Bieber',
     album: 'Stay',
     duration: 141,
-    cover: 'https://via.placeholder.com/300x300?text=Stay',
+    cover: '/images/default-album.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -52,7 +52,7 @@ export const mockTracks: Track[] = [
     artist: 'Lil Nas X & Jack Harlow',
     album: 'MONTERO',
     duration: 212,
-    cover: 'https://via.placeholder.com/300x300?text=Industry+Baby',
+    cover: '/images/montero.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -61,7 +61,7 @@ export const mockTracks: Track[] = [
     artist: 'Harry Styles',
     album: 'Harry\'s House',
     duration: 167,
-    cover: 'https://via.placeholder.com/300x300?text=As+It+Was',
+    cover: '/images/harrys-house.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -70,7 +70,7 @@ export const mockTracks: Track[] = [
     artist: 'Harry Styles',
     album: 'Harry\'s House',
     duration: 193,
-    cover: 'https://via.placeholder.com/300x300?text=Music+For+Sushi',
+    cover: '/images/harrys-house.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -79,7 +79,7 @@ export const mockTracks: Track[] = [
     artist: 'Dua Lipa',
     album: 'Future Nostalgia',
     duration: 198,
-    cover: 'https://via.placeholder.com/300x300?text=Don%27t+Worry+Darling',
+    cover: '/images/future-nostalgia.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -88,7 +88,7 @@ export const mockTracks: Track[] = [
     artist: 'Dua Lipa',
     album: 'Future Nostalgia',
     duration: 194,
-    cover: 'https://via.placeholder.com/300x300?text=Physical',
+    cover: '/images/future-nostalgia.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -97,7 +97,7 @@ export const mockTracks: Track[] = [
     artist: 'The Weeknd',
     album: 'After Hours',
     duration: 215,
-    cover: 'https://via.placeholder.com/300x300?text=Save+Your+Tears',
+    cover: '/images/after-hours.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   },
   {
@@ -106,7 +106,7 @@ export const mockTracks: Track[] = [
     artist: 'The Weeknd',
     album: 'After Hours',
     duration: 198,
-    cover: 'https://via.placeholder.com/300x300?text=Heartless',
+    cover: '/images/after-hours.svg',
     audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
   }
 ];
@@ -117,7 +117,7 @@ export const mockAlbums: Album[] = [
     name: 'After Hours',
     artist: 'The Weeknd',
     artistId: 'artist1',
-    cover: 'https://via.placeholder.com/300x300?text=After+Hours',
+    cover: '/images/after-hours.svg',
     tracks: [
       mockTracks[0], // Blinding Lights
       mockTracks[10], // Save Your Tears
@@ -131,7 +131,7 @@ export const mockAlbums: Album[] = [
     name: 'Fine Line',
     artist: 'Harry Styles',
     artistId: 'artist2',
-    cover: 'https://via.placeholder.com/300x300?text=Fine+Line',
+    cover: '/images/fine-line.svg',
     tracks: [
       mockTracks[1], // Watermelon Sugar
     ],
@@ -143,7 +143,7 @@ export const mockAlbums: Album[] = [
     name: 'Harry\'s House',
     artist: 'Harry Styles',
     artistId: 'artist2',
-    cover: 'https://via.placeholder.com/300x300?text=Harry%27s+House',
+    cover: '/images/harrys-house.svg',
     tracks: [
       mockTracks[6], // As It Was
       mockTracks[7], // Music For a Sushi Restaurant
@@ -156,7 +156,7 @@ export const mockAlbums: Album[] = [
     name: 'Future Nostalgia',
     artist: 'Dua Lipa',
     artistId: 'artist3',
-    cover: 'https://via.placeholder.com/300x300?text=Future+Nostalgia',
+    cover: '/images/future-nostalgia.svg',
     tracks: [
       mockTracks[2], // Levitating
       mockTracks[8], // Don't Worry Darling
@@ -170,7 +170,7 @@ export const mockAlbums: Album[] = [
     name: 'SOUR',
     artist: 'Olivia Rodrigo',
     artistId: 'artist4',
-    cover: 'https://via.placeholder.com/300x300?text=SOUR',
+    cover: '/images/sour.svg',
     tracks: [
       mockTracks[3], // Good 4 U
     ],
@@ -182,7 +182,7 @@ export const mockAlbums: Album[] = [
     name: 'MONTERO',
     artist: 'Lil Nas X & Jack Harlow',
     artistId: 'artist5',
-    cover: 'https://via.placeholder.com/300x300?text=MONTERO',
+    cover: '/images/montero.svg',
     tracks: [
       mockTracks[5], // Industry Baby
     ],
@@ -195,7 +195,7 @@ export const mockArtists: Artist[] = [
   {
     id: 'artist1',
     name: 'The Weeknd',
-    image: 'https://via.placeholder.com/300x300?text=The+Weeknd',
+    image: '/images/the-weeknd.svg',
     genres: ['R&B', 'Pop', 'Alternative'],
     albums: [mockAlbums[0]], // After Hours
     topTracks: [
@@ -208,7 +208,7 @@ export const mockArtists: Artist[] = [
   {
     id: 'artist2',
     name: 'Harry Styles',
-    image: 'https://via.placeholder.com/300x300?text=Harry+Styles',
+    image: '/images/harry-styles.svg',
     genres: ['Pop', 'Rock', 'Folk'],
     albums: [mockAlbums[1], mockAlbums[2]], // Fine Line, Harry's House
     topTracks: [
@@ -221,7 +221,7 @@ export const mockArtists: Artist[] = [
   {
     id: 'artist3',
     name: 'Dua Lipa',
-    image: 'https://via.placeholder.com/300x300?text=Dua+Lipa',
+    image: '/images/dua-lipa.svg',
     genres: ['Pop', 'Dance', 'Electronic'],
     albums: [mockAlbums[3]], // Future Nostalgia
     topTracks: [
@@ -234,7 +234,7 @@ export const mockArtists: Artist[] = [
   {
     id: 'artist4',
     name: 'Olivia Rodrigo',
-    image: 'https://via.placeholder.com/300x300?text=Olivia+Rodrigo',
+    image: '/images/olivia-rodrigo.svg',
     genres: ['Pop', 'Alternative', 'Indie'],
     albums: [mockAlbums[4]], // SOUR
     topTracks: [
@@ -245,7 +245,7 @@ export const mockArtists: Artist[] = [
   {
     id: 'artist5',
     name: 'Lil Nas X',
-    image: 'https://via.placeholder.com/300x300?text=Lil+Nas+X',
+    image: '/images/lil-nas-x.svg',
     genres: ['Hip-Hop', 'Pop', 'Country'],
     albums: [mockAlbums[5]], // MONTERO
     topTracks: [

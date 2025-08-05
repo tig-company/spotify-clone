@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, Shuffle } from 'lucide-react';
 import { Button } from './ui/button';
+import { Image } from './ui/image';
 import { Artist } from '../types';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -55,10 +56,13 @@ export function ArtistDetails({ artist }: ArtistDetailsProps) {
       {/* Artist Header */}
       <div className="p-6 bg-gradient-to-b from-neutral-800 to-transparent">
         <div className="flex flex-col items-center text-center mb-6">
-          <img
+          <Image
             src={artist.image}
-            alt={artist.name}
+            alt={`${artist.name} - Artist photo`}
             className="w-48 h-48 rounded-full object-cover mb-4 shadow-lg"
+            fallbackSrc="/images/default-artist.svg"
+            lazy={false}
+            showLoadingSkeleton={true}
           />
           <h1 className="text-3xl font-black text-white mb-2">{artist.name}</h1>
           <p className="text-spotify-text-gray text-sm mb-2">
@@ -119,10 +123,13 @@ export function ArtistDetails({ artist }: ArtistDetailsProps) {
               >
                 <Play size={16} />
               </Button>
-              <img
+              <Image
                 src={track.cover}
-                alt={track.title}
+                alt={`${track.title} - Album cover`}
                 className="w-12 h-12 rounded object-cover"
+                fallbackSrc="/images/default-track.svg"
+                lazy={true}
+                showLoadingSkeleton={true}
               />
               <div className="flex-1 min-w-0">
                 <h3 className="text-white font-medium truncate">{track.title}</h3>
@@ -146,10 +153,13 @@ export function ArtistDetails({ artist }: ArtistDetailsProps) {
               className="bg-spotify-medium-gray rounded-lg p-4 hover:bg-spotify-light-gray cursor-pointer transition-colors"
               onClick={() => handleAlbumClick(album)}
             >
-              <img
+              <Image
                 src={album.cover}
-                alt={album.name}
+                alt={`${album.name} by ${album.artist} - Album cover`}
                 className="w-full aspect-square rounded-lg object-cover mb-3"
+                fallbackSrc="/images/default-album.svg"
+                lazy={true}
+                showLoadingSkeleton={true}
               />
               <h3 className="text-white font-medium text-sm mb-1 truncate">
                 {album.name}
