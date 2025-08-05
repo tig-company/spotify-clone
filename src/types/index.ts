@@ -54,6 +54,8 @@ export interface PlayerState {
   duration: number;
   shuffle: boolean;
   repeat: 'none' | 'one' | 'all';
+  queue: Track[];
+  currentIndex: number;
 }
 
 export interface NavigationState {

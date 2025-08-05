@@ -12,7 +12,7 @@ function formatTime(seconds: number): string {
 }
 
 export function Player() {
-  const { state, pauseTrack, resumeTrack, setVolume, toggleShuffle, toggleRepeat } = usePlayer();
+  const { state, pauseTrack, resumeTrack, setVolume, toggleShuffle, toggleRepeat, nextTrack, previousTrack } = usePlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -47,17 +47,17 @@ export function Player() {
   const progressPercentage = state.duration > 0 ? (state.currentTime / state.duration) * 100 : 0;
 
   return (
-    <div className="h-[90px] bg-spotify-medium-gray border-t border-spotify-light-gray flex items-center px-4 md:px-2 text-white" role="region" aria-label="Music player">
+    <div className="h-[90px] bg-spotify-medium-gray border-t border-spotify-light-gray flex items-center px-2 sm:px-4 text-white" role="region" aria-label="Music player">
       <audio ref={audioRef} aria-hidden="true" />
       
       {/* Track Info */}
-      <div className="flex-1 flex items-center gap-3 min-w-0 md:hidden">
+      <div className="flex-1 flex items-center gap-2 sm:gap-3 min-w-0 max-w-[200px] sm:max-w-[300px]">
         {state.currentTrack && (
           <>
             <img 
               src={state.currentTrack.cover} 
               alt={state.currentTrack.title}
-              className="w-14 h-14 rounded object-cover"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded object-cover flex-shrink-0"
             />
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
@@ -72,14 +72,14 @@ export function Player() {
       </div>
 
       {/* Player Controls */}
-      <div className="flex-1 md:flex-none flex flex-col items-center gap-2 max-w-[722px] md:max-w-none">
-        <div className="flex items-center gap-4 md:gap-2" role="group" aria-label="Playback controls">
+      <div className="flex-1 flex flex-col items-center gap-1 sm:gap-2 max-w-[722px] px-2 sm:px-4">
+        <div className="flex items-center gap-2 sm:gap-4" role="group" aria-label="Playback controls">
           <Button
             variant="ghost"
             size="icon-sm"
             onClick={toggleShuffle}
             className={cn(
-              "text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden",
+              "text-spotify-text-gray hover:text-white hover:bg-transparent hidden sm:flex",
               state.shuffle && "text-spotify-green"
             )}
             aria-label={`${state.shuffle ? 'Disable' : 'Enable'} shuffle`}
@@ -90,7 +90,9 @@ export function Player() {
           <Button
             variant="ghost"
             size="icon-sm"
-            className="text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden"
+            onClick={previousTrack}
+            disabled={state.queue.length === 0 || (state.currentIndex === 0 && state.repeat !== 'all' && state.repeat !== 'one')}
+            className="text-spotify-text-gray hover:text-white hover:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Previous track"
           >
             <SkipBack size={16} />
@@ -108,7 +110,9 @@ export function Player() {
           <Button
             variant="ghost"
             size="icon-sm"
-            className="text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden"
+            onClick={nextTrack}
+            disabled={state.queue.length === 0 || (state.currentIndex === state.queue.length - 1 && state.repeat !== 'all' && state.repeat !== 'one')}
+            className="text-spotify-text-gray hover:text-white hover:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Next track"
           >
             <SkipForward size={16} />
@@ -118,7 +122,7 @@ export function Player() {
             size="icon-sm"
             onClick={toggleRepeat}
             className={cn(
-              "text-spotify-text-gray hover:text-white hover:bg-transparent md:hidden",
+              "text-spotify-text-gray hover:text-white hover:bg-transparent hidden sm:flex",
               state.repeat !== 'none' && "text-spotify-green"
             )}
             aria-label={`Repeat: ${state.repeat}`}
@@ -128,7 +132,7 @@ export function Player() {
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 w-full max-w-[722px] md:hidden">
+        <div className="flex items-center gap-2 w-full max-w-[722px]">
           <span className="text-xs text-spotify-text-gray min-w-[40px] text-center">
             {formatTime(state.currentTime)}
           </span>
@@ -147,9 +151,9 @@ export function Player() {
       </div>
 
       {/* Volume Controls */}
-      <div className="flex-1 md:hidden flex items-center justify-end gap-2">
+      <div className="flex-1 flex items-center justify-end gap-2 max-w-[120px] sm:max-w-[150px]">
         <Volume2 size={16} className="text-spotify-text-gray" />
-        <div className="w-[93px] group">
+        <div className="w-[60px] sm:w-[93px] group">
           <Slider
             value={[state.volume]}
             max={1}
