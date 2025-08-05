@@ -1,0 +1,14 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="futureNostalgia" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff1493"/>
+      <stop offset="50%" style="stop-color:#00bfff"/>
+      <stop offset="100%" style="stop-color:#ffd700"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#futureNostalgia)"/>
+  <circle cx="150" cy="150" r="80" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <text x="150" y="100" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="bold">FUTURE</text>
+  <text x="150" y="190" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="bold">NOSTALGIA</text>
+  <text x="150" y="260" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12">Dua Lipa</text>
+</svg>

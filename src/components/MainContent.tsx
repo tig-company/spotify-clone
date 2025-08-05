@@ -1,67 +1,12 @@
 import React from 'react';
 import { Play } from 'lucide-react';
 import { Button } from './ui/button';
+import { Image } from './ui/image';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { Track } from '../types';
 import { mockTracks, findArtistByName, findAlbumByNameAndArtist } from '../data/mockData';
 
-const mockTracks: Track[] = [
-  {
-    id: '1',
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    album: 'After Hours',
-    duration: 200,
-    cover: 'https://via.placeholder.com/300x300?text=Blinding+Lights',
-    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-  },
-  {
-    id: '2',
-    title: 'Watermelon Sugar',
-    artist: 'Harry Styles',
-    album: 'Fine Line',
-    duration: 174,
-    cover: 'https://via.placeholder.com/300x300?text=Watermelon+Sugar',
-    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-  },
-  {
-    id: '3',
-    title: 'Levitating',
-    artist: 'Dua Lipa',
-    album: 'Future Nostalgia',
-    duration: 203,
-    cover: 'https://via.placeholder.com/300x300?text=Levitating',
-    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-  },
-  {
-    id: '4',
-    title: 'Good 4 U',
-    artist: 'Olivia Rodrigo',
-    album: 'SOUR',
-    duration: 178,
-    cover: 'https://via.placeholder.com/300x300?text=Good+4+U',
-    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-  },
-  {
-    id: '5',
-    title: 'Stay',
-    artist: 'The Kid LAROI & Justin Bieber',
-    album: 'Stay',
-    duration: 141,
-    cover: 'https://via.placeholder.com/300x300?text=Stay',
-    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-  },
-  {
-    id: '6',
-    title: 'Industry Baby',
-    artist: 'Lil Nas X & Jack Harlow',
-    album: 'MONTERO',
-    duration: 212,
-    cover: 'https://via.placeholder.com/300x300?text=Industry+Baby',
-    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-  }
-];
 
 interface TrackCardProps {
   track: Track;
@@ -71,10 +16,13 @@ interface TrackCardProps {
 function TrackCard({ track, onPlay }: TrackCardProps) {
   return (
     <div className="bg-spotify-medium-gray rounded-lg p-4 transition-colors duration-300 cursor-pointer relative group hover:bg-spotify-light-gray">
-      <img 
+      <Image 
         src={track.cover} 
-        alt={track.title}
-        className="w-full aspect-square rounded-lg object-cover mb-4" 
+        alt={`${track.title} by ${track.artist} - Album cover`}
+        className="w-full aspect-square rounded-lg object-cover mb-4"
+        fallbackSrc="/images/default-album.svg"
+        lazy={true}
+        showLoadingSkeleton={true}
       />
       <h3 className="text-base font-bold mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
         {track.title}

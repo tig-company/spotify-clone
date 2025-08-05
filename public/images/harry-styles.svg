@@ -1,0 +1,15 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="harryGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#ff69b4"/>
+      <stop offset="100%" style="stop-color:#4169e1"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="150" r="150" fill="url(#harryGrad)"/>
+  <circle cx="150" cy="120" r="40" fill="#ffd700"/>
+  <ellipse cx="140" cy="115" rx="3" ry="5" fill="#000000"/>
+  <ellipse cx="160" cy="115" rx="3" ry="5" fill="#000000"/>
+  <path d="M140 130 Q150 135 160 130" stroke="#000000" stroke-width="2" fill="none"/>
+  <path d="M120 100 Q150 80 180 100" stroke="#8b4513" stroke-width="4" fill="none"/>
+  <text x="150" y="250" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="bold">HARRY STYLES</text>
+</svg>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, Clock } from 'lucide-react';
 import { Button } from './ui/button';
+import { Image } from './ui/image';
 import { Album } from '../types';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -64,10 +65,13 @@ export function AlbumDetails({ album }: AlbumDetailsProps) {
       {/* Album Header */}
       <div className="p-6 bg-gradient-to-b from-neutral-800 to-transparent">
         <div className="flex flex-col items-center text-center mb-6">
-          <img
+          <Image
             src={album.cover}
-            alt={album.name}
+            alt={`${album.name} by ${album.artist} - Album cover`}
             className="w-48 h-48 rounded-lg object-cover mb-4 shadow-lg"
+            fallbackSrc="/images/default-album.svg"
+            lazy={false}
+            showLoadingSkeleton={true}
           />
           <p className="text-spotify-text-gray text-sm mb-1">Album</p>
           <h1 className="text-2xl font-black text-white mb-2">{album.name}</h1>
